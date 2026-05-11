@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/", "/login", "/auth/callback", "/auth/auth-code-error"];
+const PUBLIC_PATHS = ["/", "/login", "/auth/callback", "/auth/auth-code-error", "/auth/unauthorized"];
 
 function isPublicPath(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) return true;

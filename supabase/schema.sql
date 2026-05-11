@@ -68,7 +68,24 @@ create trigger profiles_touch_updated_at
   for each row execute function public.touch_updated_at();
 
 -- =====================================================================
--- 5. Visa document checklist progress (one row per user).
+-- 5. Email allowlist — only addresses in this table may sign in.
+--    Managed directly from the Supabase dashboard (insert / delete rows).
+-- =====================================================================
+create table if not exists public.allowed_emails (
+  email       text primary key,
+  note        text,                      -- optional label, e.g. "Shoaib Q"
+  added_at    timestamptz not null default now()
+);
+
+-- Only the service-role key (used by server-side code) may read this table.
+-- Anon / authenticated users have no access, so the list stays private.
+alter table public.allowed_emails enable row level security;
+
+-- No RLS policies → table is inaccessible to any JWT-authenticated client.
+-- Server-side code (callback route) uses the service-role key which bypasses RLS.
+
+-- =====================================================================
+-- 6. Visa document checklist progress (one row per user).
 --    checked_items is a JSONB array of stable item ids the user ticked.
 --    funding_type filters which items are shown in the UI.
 -- =====================================================================
