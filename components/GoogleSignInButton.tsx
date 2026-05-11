@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { getSiteUrl } from "@/lib/config";
 
 export default function GoogleSignInButton() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +16,7 @@ export default function GoogleSignInButton() {
     setError(null);
 
     const supabase = createClient();
-    const callbackUrl = new URL("/auth/callback", getSiteUrl());
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
     callbackUrl.searchParams.set("redirectTo", redirectTo);
 
     const { error } = await supabase.auth.signInWithOAuth({
