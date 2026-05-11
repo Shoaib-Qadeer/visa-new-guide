@@ -15,11 +15,20 @@ export const COHORT_LABEL = "Cohort-26/27";
  * Resolves the canonical site URL for OAuth redirects.
  */
 export function getSiteUrl(): string {
+  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
   const url =
     process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : "http://localhost:3000");
+    (vercelUrl
+      ? vercelUrl.startsWith("http")
+        ? vercelUrl
+        : `https://${vercelUrl}`
+      : process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : undefined);
+
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_SITE_URL must be set in production.");
+  }
 
   return url.replace(/\/$/, "");
 }
