@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+html.dark {
+  --background: #020617;
+  --foreground: #e2e8f0;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+}
+
+*:focus-visible {
+  outline: 2px solid #3661ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Watermark for template viewer ---------- */
+.watermark-wrap {
+  position: relative;
+  isolation: isolate;
+}
+.watermark-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: repeating-linear-gradient(
+    -30deg,
+    transparent 0,
+    transparent 120px,
+    rgba(15, 23, 42, 0.06) 120px,
+    rgba(15, 23, 42, 0.06) 121px
+  );
+}
+.watermark-wrap::after {
+  content: "COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS  •  COMSKILLS";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  letter-spacing: 0.18em;
+  color: rgba(15, 23, 42, 0.07);
+  transform: rotate(-22deg);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  pointer-events: none;
+  z-index: 2;
+  text-align: center;
+  overflow: hidden;
+}
+html.dark .watermark-wrap::before {
+  background-image: repeating-linear-gradient(
+    -30deg,
+    transparent 0,
+    transparent 120px,
+    rgba(226, 232, 240, 0.06) 120px,
+    rgba(226, 232, 240, 0.06) 121px
+  );
+}
+html.dark .watermark-wrap::after {
+  color: rgba(226, 232, 240, 0.06);
+}
+
+/* Disable text selection on watermarked content so users can't copy raw text from the rendered preview.
+   The Copy button still works because it pulls from the underlying data, not the DOM selection. */
+.watermark-content {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Hide native PDF download/print controls when possible (Chrome obeys #toolbar=0 but we also block right-click). */
+.pdf-frame {
+  width: 100%;
+  height: 80vh;
+  border: 0;
+  border-radius: 0.75rem;
+  background: #1e293b;
+}
